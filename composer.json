@@ -1,0 +1,29 @@
+{
+	"name": "conpago/conpago-system",
+	"description": "Conpago System interactions implementation.",
+	"version": "0.0.1-alpha",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Bartosz Gołek",
+			"email": "bartosz.golek@gmail.com",
+			"homepage": "http://bartosz.golek.biz"
+		}
+	],
+	"require": {
+		"conpago/conpago-system-contract": "dev-master"
+	},
+	"require-dev": {
+		"pdepend/pdepend": "*",
+		"phpmd/phpmd": "*",
+		"squizlabs/php_codesniffer": "*",
+		"sebastian/phpcpd": "*",
+		"phpunit/phpunit": "5.*"
+	},
+	"autoload": {
+		"psr-0": {
+			"Conpago\\": "src/"
+		}
+	}
+}
