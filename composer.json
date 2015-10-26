@@ -12,7 +12,8 @@
 		}
 	],
 	"require": {
-		"conpago/conpago-system-contract": "dev-master"
+		"conpago/conpago-system-contract": "dev-master",
+		"symfony/yaml": "*"
 	},
 	"require-dev": {
 		"pdepend/pdepend": "*",

@@ -2,32 +2,26 @@
 	/**
 	 * Created by PhpStorm.
 	 * User: Bartosz Gołek
-	 * Date: 2014-06-09
-	 * Time: 00:00
+	 * Date: 09.11.13
+	 * Time: 15:30
 	 */
 
 	namespace Conpago\Config;
 
 	use Conpago\Config\Contract\IConfig;
+	use Conpago\File\Contract\IFileSystem;
 
-
-	class PhpConfig implements IConfig
+	class PhpConfig extends BaseConfig implements IConfig
 	{
 		/**
-		 * @param $path
-		 *
-		 * @return mixed
+		 * @param IFileSystem $fileSystem
+		 * @param string $configMask
 		 */
-		function getValue($path){
-
-		}
-
-		/**
-		 * @param $path
-		 *
-		 * @return bool
-		 */
-		function hasValue($path){
-
+		function __construct(IFileSystem $fileSystem, $configMask = '*')
+		{
+			foreach ($fileSystem->glob($configMask) as $filePath)
+			{
+				$this->config = array_merge($this->config, $fileSystem->includeFile($filePath));
+			}
 		}
 	}

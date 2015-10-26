@@ -3,17 +3,21 @@
 	 * Created by PhpStorm.
 	 * User: Bartosz Gołek
 	 * Date: 2014-06-10
-	 * Time: 20:19
+	 * Time: 20:20
 	 */
 
-	namespace Conpago\Contract;
+	namespace Conpago;
 
 	use DateTime;
+	use Conpago\Contract\ITimeService;
 
-	interface ITimeService
+	class TimeService implements ITimeService
 	{
 		/**
 		 * @return DateTime
 		 */
-		function getCurrentTime();
+		function getCurrentTime()
+		{
+			return new DateTime('now');
+		}
 	}

@@ -9,25 +9,20 @@
 	namespace Conpago\Config;
 
 	use Conpago\Config\Contract\IConfig;
+	use Conpago\File\Contract\IFileSystem;
 
 
-	class JsonConfig implements IConfig
+	class JsonConfig extends BaseConfig implements IConfig
 	{
 		/**
-		 * @param $path
-		 *
-		 * @return mixed
+		 * @param IFileSystem $fileSystem
+		 * @param string $configMask
 		 */
-		function getValue($path){
-
-		}
-
-		/**
-		 * @param $path
-		 *
-		 * @return bool
-		 */
-		function hasValue($path){
-
+		function __construct(IFileSystem $fileSystem, $configMask = '*')
+		{
+			foreach ($fileSystem->glob($configMask) as $filePath)
+			{
+				$this->config = array_merge($this->config, json_decode($fileSystem->includeFile($fileSystem->getFileContent($filePath))));
+			}
 		}
 	}

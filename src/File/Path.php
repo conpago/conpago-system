@@ -6,11 +6,21 @@
 	 * Time: 15:30
 	 */
 
-	namespace Conpago\File\Contract;
+	namespace Conpago\File;
 
-	interface IPath
+	use Conpago\File\Contract\IPath;
+
+	class Path implements IPath
 	{
-		public function createPath($elements);
+		public function createPath($elements)
+		{
+			$elements = func_get_args();
 
-		public function fileName($filePath);
+			return implode(DIRECTORY_SEPARATOR, $elements);
+		}
+
+		public function fileName($filePath)
+		{
+			return basename(str_replace('\\', '/', $filePath));
+		}
 	}
