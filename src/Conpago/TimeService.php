@@ -10,10 +10,13 @@
 
 	use DateTime;
 
-	interface ITimeService
+	class TimeService
 	{
 		/**
 		 * @return DateTime
 		 */
-		function getCurrentTime();
+		function getCurrentTime()
+		{
+			return new DateTime('now');
+		}
 	}
