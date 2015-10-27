@@ -6,11 +6,12 @@
 	 * Time: 20:19
 	 */
 
-	namespace Conpago\Contract;
+	namespace Conpago;
 
+	use Conpago\Contract\ITimeService;
 	use DateTime;
 
-	class TimeService
+	class TimeService implements ITimeService
 	{
 		/**
 		 * @return DateTime
