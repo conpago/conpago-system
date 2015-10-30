@@ -17,8 +17,6 @@
 		/**
 		 * @param IFileSystem $fileSystem
 		 * @param string $mask
-		 *
-		 * @internal param IAppMask $appMask
 		 */
 		function __construct(IFileSystem $fileSystem, $mask = '*.config.json')
 		{
