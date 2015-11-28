@@ -9,12 +9,16 @@
 	namespace Conpago\Config;
 
 
-	class BaseConfig {
+	class ArrayConfig {
 
 		/**
 		 * @var array
 		 */
-		protected $config = array();
+		protected $config;
+
+		function __construct(array $config) {
+			$this->config = $config;
+		}
 
 		function getValue($path) {
 			$pathArray      = explode('.', $path);

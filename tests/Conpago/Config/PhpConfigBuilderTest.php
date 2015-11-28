@@ -8,14 +8,14 @@
 
 	namespace Conpago\Config;
 
-	class PhpConfigTest extends \PHPUnit_Framework_TestCase
+	class PhpConfigBuilderTest extends \PHPUnit_Framework_TestCase
 	{
 		/**
 		 * @var \PHPUnit_Framework_MockObject_MockObject
 		 */
 		protected $fileSystem;
 		/**
-		 * @var PhpConfig
+		 * @var PhpConfigBuilder
 		 */
 		protected $config;
 
@@ -28,7 +28,8 @@
 				->with("*.config.php")
 				->willReturn([]);
 
-			$this->config = new PhpConfig($this->fileSystem);
+			$this->config = new PhpConfigBuilder($this->fileSystem);
+			$this->config->build();
 		}
 
 		function test_ConstructorWillSearchForFilesWithGivenMask()
@@ -40,7 +41,8 @@
 			                 ->with("8")
 			                 ->willReturn([]);
 
-			$this->config = new PhpConfig($this->fileSystem, "8");
+			$this->config = new PhpConfigBuilder($this->fileSystem, "8");
+			$this->config->build();
 		}
 
 		function test_LoadOneFileWillAddValuesToConfig()
@@ -55,8 +57,8 @@
 			                 ->method("glob")
 			                 ->willReturn(["x"]);
 
-			$this->config = new PhpConfig($this->fileSystem);
-			$this->assertEquals("b", $this->config->getValue("a"));
+			$this->config = new PhpConfigBuilder($this->fileSystem);
+			$this->assertEquals(["a" => "b"], $this->config->build());
 		}
 
 		function test_LoadTwoFilesWillAppendValuesFromSecondFileToConfig()
@@ -67,16 +69,15 @@
                  ->method("includeFile")
 				->withConsecutive(["x"], ["y"])
 				->willReturnOnConsecutiveCalls(
-					["c" => "d"],
-					["a" => "b"]
+					["a" => "b"],
+					["c" => "d"]
 				);
 			$this->fileSystem->expects($this->any())
 			                 ->method("glob")
 			                 ->willReturn(["x", "y"]);
 
-			$this->config = new PhpConfig($this->fileSystem);
-			$this->assertEquals("b", $this->config->getValue("a"));
-			$this->assertEquals("d", $this->config->getValue("c"));
+			$this->config = new PhpConfigBuilder($this->fileSystem);
+			$this->assertEquals(["a" => "b", "c" => "d"], $this->config->build());
 		}
 
 		function test_LoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
@@ -94,7 +95,7 @@
 			                 ->method("glob")
 			                 ->willReturn(["x", "y"]);
 
-			$this->config = new PhpConfig($this->fileSystem);
-			$this->assertEquals("b", $this->config->getValue("c"));
+			$this->config = new PhpConfigBuilder($this->fileSystem);
+			$this->assertEquals(["c" => "b"], $this->config->build());
 		}
 	}

@@ -9,7 +9,7 @@
 	namespace Conpago\Config;
 
 
-	class BaseConfigTest extends \PHPUnit_Framework_TestCase
+	class ArrayConfigTest extends \PHPUnit_Framework_TestCase
 	{
 		const SIMPLE_VALUE = 1;
 		const NESTED_VALUE = 2;
@@ -19,13 +19,13 @@
 
 		public function testGetSimpleValue()
 		{
-			$config = new TestableBaseConfig([self::SIMPLE_KEY => self::SIMPLE_VALUE]);
+			$config = new ArrayConfig([self::SIMPLE_KEY => self::SIMPLE_VALUE]);
 			$this->assertEquals(self::SIMPLE_VALUE, $config->getValue(self::SIMPLE_KEY));
 		}
 
 		public function testGetNestedValue()
 		{
-			$config = new TestableBaseConfig([
+			$config = new ArrayConfig([
 					self::NESTING_KEY => [
 							self::NESTED_KEY => self::NESTED_VALUE
 					]
@@ -39,7 +39,7 @@
 		 */
 		public function testGetNotExistingSimpleValue()
 		{
-			$config = new TestableBaseConfig([]);
+			$config = new ArrayConfig([]);
 			$config->getValue('dummy');
 		}
 
@@ -48,19 +48,19 @@
 		 */
 		public function testGetNotExistingNestedValue()
 		{
-			$config = new TestableBaseConfig([]);
+			$config = new ArrayConfig([]);
 			$config->getValue( $this->buildNestedPath( array( self::NESTING_KEY, 'dummy' ) ) );
 		}
 
 		public function testHasSimpleValue()
 		{
-			$config = new TestableBaseConfig([self::SIMPLE_KEY => self::SIMPLE_VALUE]);
+			$config = new ArrayConfig([self::SIMPLE_KEY => self::SIMPLE_VALUE]);
 			$this->assertTrue($config->hasValue(self::SIMPLE_KEY));
 		}
 
 		public function testHasNestedValue()
 		{
-			$config = new TestableBaseConfig([
+			$config = new ArrayConfig([
 					self::NESTING_KEY => [
 							self::NESTED_KEY => self::NESTED_VALUE
 					]
@@ -71,14 +71,14 @@
 
 		public function testHasNotExistingNestedValue()
 		{
-			$config = new TestableBaseConfig([]);
+			$config = new ArrayConfig([]);
 			$result = $config->hasValue($this->buildNestedPath(array(self::NESTING_KEY, 'dummy')));
 			$this->assertFalse($result);
 		}
 
 		public function testHetNotExistingSimpleValue()
 		{
-			$config = new TestableBaseConfig([]);
+			$config = new ArrayConfig([]);
 			$result = $config->hasValue('dummy');
 			$this->assertFalse($result);
 		}
@@ -90,12 +90,5 @@
 		private function buildNestedPath(array $elements)
 		{
 			return implode('.', $elements);
-		}
-	}
-
-	class TestableBaseConfig extends BaseConfig
-	{
-		function __construct(array $config) {
-			$this->config = $config;
 		}
 	}

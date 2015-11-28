@@ -8,14 +8,14 @@
 
 	namespace Conpago\Config;
 
-	class JsonConfigTest extends \PHPUnit_Framework_TestCase
+	class JsonConfigBuilderTest extends \PHPUnit_Framework_TestCase
 	{
 		/**
 		 * @var \PHPUnit_Framework_MockObject_MockObject
 		 */
 		protected $fileSystem;
 		/**
-		 * @var JsonConfig
+		 * @var JsonConfigBuilder
 		 */
 		protected $config;
 
@@ -28,7 +28,8 @@
 			                 ->with("*.config.json")
 			                 ->willReturn([]);
 
-			$this->config = new JsonConfig($this->fileSystem);
+			$this->config = new JsonConfigBuilder($this->fileSystem);
+			$this->config->build();
 		}
 
 		function test_ConstructorWillSearchForFilesWithGivenMask()
@@ -40,7 +41,8 @@
 			                 ->with("8")
 			                 ->willReturn([]);
 
-			$this->config = new JsonConfig($this->fileSystem, "8");
+			$this->config = new JsonConfigBuilder($this->fileSystem, "8");
+			$this->config->build();
 		}
 
 		function test_LoadOneFileWillAddValuesToConfig()
@@ -55,8 +57,8 @@
 			                 ->method("glob")
 			                 ->willReturn(["x"]);
 
-			$this->config = new JsonConfig($this->fileSystem);
-			$this->assertEquals("b", $this->config->getValue("a"));
+			$this->config = new JsonConfigBuilder($this->fileSystem);
+			$this->assertEquals(["a" => "b"], $this->config->build());
 		}
 
 		function test_LoadTwoFilesWillAppendValuesFromSecondFileToConfig()
@@ -67,16 +69,15 @@
 			                 ->method("getFileContent")
 			                 ->withConsecutive(["x"], ["y"])
 			                 ->willReturnOnConsecutiveCalls(
-					                 '{"c": "d"}',
-					                 '{"a": "b"}'
+				                 '{"a": "b"}',
+				                 '{"c": "d"}'
 			                 );
 			$this->fileSystem->expects($this->any())
 			                 ->method("glob")
 			                 ->willReturn(["x", "y"]);
 
-			$this->config = new JsonConfig($this->fileSystem);
-			$this->assertEquals("b", $this->config->getValue("a"));
-			$this->assertEquals("d", $this->config->getValue("c"));
+			$this->config = new JsonConfigBuilder($this->fileSystem);
+			$this->assertEquals(["a" => "b", "c" => "d"], $this->config->build());
 		}
 
 		function test_LoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
@@ -94,7 +95,7 @@
 			                 ->method("glob")
 			                 ->willReturn(["x", "y"]);
 
-			$this->config = new JsonConfig($this->fileSystem);
-			$this->assertEquals("b", $this->config->getValue("c"));
+			$this->config = new JsonConfigBuilder($this->fileSystem);
+			$this->assertEquals(["c" => "b"], $this->config->build());
 		}
 	}
