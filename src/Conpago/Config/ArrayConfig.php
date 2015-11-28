@@ -9,7 +9,9 @@
 	namespace Conpago\Config;
 
 
-	class ArrayConfig {
+	use Conpago\Config\Contract\IConfig;
+
+	class ArrayConfig implements IConfig{
 
 		/**
 		 * @var array
