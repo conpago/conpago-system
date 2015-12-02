@@ -1,26 +1,45 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: Bartosz Gołek
-	 * Date: 09.11.13
-	 * Time: 15:30
-	 */
+/**
+ * Created by PhpStorm.
+ * User: bgolek
+ * Date: 2015-12-02
+ * Time: 10:34
+ */
 
-	namespace Conpago\File;
+namespace Conpago\File;
 
-	use Conpago\File\Contract\IPath;
+use Conpago\File\Contract\IPath;
 
-	class Path implements IPath
-	{
-		public function createPath($elements)
-		{
-			$elements = func_get_args();
+class Path implements IPath
+{
+    /**
+     * @var
+     */
+    private $path;
+    /**
+     * @var
+     */
+    private $realPath;
 
-			return implode(DIRECTORY_SEPARATOR, $elements);
-		}
+    /**
+     * Path constructor.
+     *
+     * @param string $path
+     * @param string $realPath
+     */
+    function __construct($path, $realPath)
+    {
+        $this->path = $path;
+        $this->realPath = $realPath;
+    }
 
-		public function fileName($filePath)
-		{
-			return basename(str_replace('\\', '/', $filePath));
-		}
-	}
+    public function get()
+    {
+        return $this->path;
+    }
+
+    public function getReal()
+    {
+        return $this->realPath;
+    }
+}

@@ -9,23 +9,19 @@
 	namespace Conpago\File;
 
 
+	use Conpago\File\Path;
+
 	class PathTest extends \PHPUnit_Framework_TestCase
 	{
-		function testCreatePath()
+		function testGetRealPath()
 		{
-			$path = new Path();
-			$this->assertEquals('a'.DIRECTORY_SEPARATOR.'b', $path->createPath('a', 'b'));
+			$path = new Path("a", "");
+			$this->assertEquals('a', $path->get());
 		}
 
-		function testFileNameWithSlash()
+		function testGetPath()
 		{
-			$path = new Path();
-			$this->assertEquals('a.txt', $path->fileName('b/a.txt'));
-		}
-
-		function testFileNameWithBackslash()
-		{
-			$path = new Path();
-			$this->assertEquals('a.txt', $path->fileName('b\a.txt'));
+			$path = new Path("", "a/b/c");
+			$this->assertEquals('a/b/c', $path->getReal());
 		}
 	}
