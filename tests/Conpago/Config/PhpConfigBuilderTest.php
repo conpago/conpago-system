@@ -8,7 +8,9 @@
 
 	namespace Conpago\Config;
 
-	class PhpConfigBuilderTest extends \PHPUnit_Framework_TestCase
+	use Conpago\File\Contract\IFileSystem;
+
+    class PhpConfigBuilderTest extends \PHPUnit_Framework_TestCase
 	{
 		/**
 		 * @var \PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +23,7 @@
 
 		function test_ConstructorWillSearchForFilesWithDefaultMask()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createFileSystemMock();
 
 			$this->fileSystem->expects($this->once())
 				->method("glob")
@@ -34,7 +36,7 @@
 
 		function test_ConstructorWillSearchForFilesWithGivenMask()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createFileSystemMock();
 
 			$this->fileSystem->expects($this->once())
 			                 ->method("glob")
@@ -47,7 +49,7 @@
 
 		function test_LoadOneFileWillAddValuesToConfig()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createFileSystemMock();
 
 			$this->fileSystem->expects($this->any())
 				->method("includeFile")
@@ -63,7 +65,7 @@
 
 		function test_LoadTwoFilesWillAppendValuesFromSecondFileToConfig()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createFileSystemMock();
 
 			$this->fileSystem->expects($this->any())
                  ->method("includeFile")
@@ -82,7 +84,7 @@
 
 		function test_LoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createFileSystemMock();
 
 			$this->fileSystem->expects($this->any())
 			                 ->method("includeFile")
@@ -97,5 +99,13 @@
 
 			$this->config = new PhpConfigBuilder($this->fileSystem);
 			$this->assertEquals(["c" => "b"], $this->config->build());
+		}
+
+		/**
+		 * @return \PHPUnit_Framework_MockObject_MockObject
+		 */
+		public function createFileSystemMock()
+		{
+			return $this->createMock(IFileSystem::class);
 		}
 	}

@@ -14,7 +14,7 @@
 		function testCreatePath()
 		{
 			$path = new PathBuilder();
-			$this->assertEquals('a'.DIRECTORY_SEPARATOR.'b', $path->createPath('a', 'b'));
+			$this->assertEquals('a'.DIRECTORY_SEPARATOR.'b', $path->createPath(['a', 'b']));
 		}
 
 		function testFileNameWithSlash()

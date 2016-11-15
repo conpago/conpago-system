@@ -12,10 +12,8 @@
 
 	class PathBuilder implements IPathBuilder
 	{
-		public function createPath($elements)
+		public function createPath(array $elements)
 		{
-			$elements = func_get_args();
-
 			return implode(DIRECTORY_SEPARATOR, $elements);
 		}
 

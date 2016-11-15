@@ -22,7 +22,8 @@
 		"phpmd/phpmd": "*",
 		"squizlabs/php_codesniffer": "*",
 		"sebastian/phpcpd": "*",
-		"phpunit/phpunit": "5.*"
+		"phpunit/phpunit": "5.*",
+		"humbug/humbug" : "*"
 	},
 	"autoload": {
 		"psr-0": {

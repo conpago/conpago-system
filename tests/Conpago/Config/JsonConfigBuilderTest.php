@@ -8,6 +8,8 @@
 
 	namespace Conpago\Config;
 
+	use \Conpago\File\Contract\IFileSystem;
+
 	class JsonConfigBuilderTest extends \PHPUnit_Framework_TestCase
 	{
 		/**
@@ -21,7 +23,7 @@
 
 		function test_ConstructorWillSearchForFilesWithDefaultMask()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createMock(IFileSystem::class);
 
 			$this->fileSystem->expects($this->once())
 			                 ->method("glob")
@@ -34,7 +36,7 @@
 
 		function test_ConstructorWillSearchForFilesWithGivenMask()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createMock(IFileSystem::class);
 
 			$this->fileSystem->expects($this->once())
 			                 ->method("glob")
@@ -47,7 +49,7 @@
 
 		function test_LoadOneFileWillAddValuesToConfig()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createMock(IFileSystem::class);
 
 			$this->fileSystem->expects($this->any())
 			                 ->method("getFileContent")
@@ -63,7 +65,7 @@
 
 		function test_LoadTwoFilesWillAppendValuesFromSecondFileToConfig()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createMock(IFileSystem::class);
 
 			$this->fileSystem->expects($this->any())
 			                 ->method("getFileContent")
@@ -82,7 +84,7 @@
 
 		function test_LoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
 		{
-			$this->fileSystem = $this->getMock("Conpago\File\Contract\IFileSystem");
+			$this->fileSystem = $this->createMock(IFileSystem::class);
 
 			$this->fileSystem->expects($this->any())
 			                 ->method("getFileContent")
