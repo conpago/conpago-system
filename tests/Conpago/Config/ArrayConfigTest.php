@@ -8,7 +8,6 @@
 
 	namespace Conpago\Config;
 
-
 	class ArrayConfigTest extends \PHPUnit_Framework_TestCase
 	{
 		const SIMPLE_VALUE = 1;

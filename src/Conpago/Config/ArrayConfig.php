@@ -11,7 +11,7 @@
 
 	use Conpago\Config\Contract\IConfig;
 
-	class ArrayConfig implements IConfig{
+	class ArrayConfig implements IConfig {
 
 		/**
 		 * @var array
