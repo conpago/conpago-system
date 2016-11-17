@@ -94,6 +94,24 @@
 			<arg value="${build}/pmd.xml"/>
 		</exec>
 	</target>
+	<target name="mutation-test">
+		<exec executable=".\vendor\bin\humbug.bat" osfamily="windows" />
+		<exec executable="./vendor/bin/humbug" osfamily="unix"/>
+	</target>
+	<target name="mutation-test-ci" depends="mutation-test">
+		<exec executable=".\vendor\bin\humbug.bat" osfamily="windows">
+			<arg value="-b" />
+			<arg value="-n" />
+			<arg value="--log-json=${build}/Mutation/humbug.json" />
+			<arg value="--log-text=${build}/Mutation/humbug.txt" />
+		</exec>
+		<exec executable="./vendor/bin/humbug" osfamily="unix">
+			<arg value="-b" />
+			<arg value="-n" />
+			<arg value="--log-json=${build}/Mutation/humbug.json" />
+			<arg value="--log-text=${build}/Mutation/humbug.txt" />
+		</exec>
+	</target>
 
 	<target name="pdepend">
 		<exec executable=".\vendor\bin\pdepend.bat" osfamily="windows" failonerror="true">
@@ -172,5 +190,5 @@
 		</exec>
 	</target>
 
-	<target name="ci" depends="init,dev-update,test-ci,phpcpd-ci,phpmd-ci,pdepend-ci,phpcs-ci" />
+	<target name="ci" depends="init,dev-update,test-ci,phpcpd-ci,phpmd-ci,pdepend-ci,phpcs-ci,mutation-test-ci" />
 </project>
