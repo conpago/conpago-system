@@ -8,8 +8,8 @@
 
 	namespace Conpago;
 
-	use Conpago\Contract\ITimeService;
-	use DateTime;
+	use Conpago\Time\Contract\ITimeService;
+    use DateTime;
 
 	class TimeService implements ITimeService
 	{
