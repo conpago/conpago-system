@@ -82,5 +82,10 @@ class FileSystem implements IFileSystem
     {
         return mkdir($pathname, 0777, $recursive);
     }
+
+    public function fileExists($filename)
+    {
+        return file_exists($filename);
+    }
 }
 
