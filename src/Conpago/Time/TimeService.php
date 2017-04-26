@@ -6,7 +6,7 @@
 	 * Time: 20:19
 	 */
 
-	namespace Conpago;
+	namespace Conpago\Time;
 
 	use Conpago\Time\Contract\ITimeService;
     use DateTime;

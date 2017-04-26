@@ -30,7 +30,8 @@
         <directory suffix=".php">src</directory>
         <exclude>
             <file>src/Conpago/File/FileSystem.php</file>
-            <file>src/Conpago/TimeService.php</file>
+            <file>src/Conpago/Time/TimeService.php</file>
+            <file>src/Conpago/Time/TimeZone.php</file>
         </exclude>
     </whitelist>
     </filter>
