@@ -1,111 +1,103 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: Bartosz Gołek
-	 * Date: 2014-06-09
-	 * Time: 00:00
-	 */
+namespace Conpago\Config;
 
-	namespace Conpago\Config;
+use Conpago\File\Contract\IFileSystem;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-	use Conpago\File\Contract\IFileSystem;
+class YamlConfigBuilderTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var  MockObject | IFileSystem*/
+    protected $fileSystemMock;
 
-    class YamlConfigBuilderTest extends \PHPUnit_Framework_TestCase
-	{
-		/**
-		 * @var \PHPUnit_Framework_MockObject_MockObject
-		 */
-		protected $fileSystem;
-		/**
-		 * @var YamlConfigBuilder
-		 */
-		protected $config;
+    /** @var YamlConfigBuilder */
+    protected $config;
 
-		function test_ConstructorWillSearchForFilesWithDefaultMask()
-		{
-			$this->fileSystem = $this->getFileSystemMock();
+    public function testConstructorWillSearchForFilesWithDefaultMask()
+    {
+        $this->fileSystemMock = $this->getFileSystemMock();
 
-			$this->fileSystem->expects($this->once())
-			                 ->method("glob")
-			                 ->with("*.config.yaml")
-			                 ->willReturn([]);
+        $this->fileSystemMock->expects($this->once())
+                         ->method("glob")
+                         ->with("*.config.yaml")
+                         ->willReturn([]);
 
-			$this->config = new YamlConfigBuilder($this->fileSystem);
-			$this->config->build();
-		}
-
-		function test_ConstructorWillSearchForFilesWithGivenMask()
-		{
-			$this->fileSystem = $this->getFileSystemMock();
-
-			$this->fileSystem->expects($this->once())
-			                 ->method("glob")
-			                 ->with("8")
-			                 ->willReturn([]);
-
-			$this->config = new YamlConfigBuilder($this->fileSystem, "8");
-			$this->config->build();
-		}
-
-		function test_LoadOneFileWillAddValuesToConfig()
-		{
-			$this->fileSystem = $this->getFileSystemMock();
-
-			$this->fileSystem->expects($this->any())
-			                 ->method("getFileContent")
-			                 ->willReturn('a: "b"');
-
-			$this->fileSystem->expects($this->any())
-			                 ->method("glob")
-			                 ->willReturn(["x"]);
-
-			$this->config = new YamlConfigBuilder($this->fileSystem);
-			$this->assertEquals(["a" => "b"], $this->config->build());
-		}
-
-		function test_LoadTwoFilesWillAppendValuesFromSecondFileToConfig()
-		{
-			$this->fileSystem = $this->getFileSystemMock();
-
-			$this->fileSystem->expects($this->any())
-			                 ->method("getFileContent")
-			                 ->withConsecutive(["x"], ["y"])
-			                 ->willReturnOnConsecutiveCalls(
-					                 'a: "b"',
-					                 'c: "d"'
-			                 );
-			$this->fileSystem->expects($this->any())
-			                 ->method("glob")
-			                 ->willReturn(["x", "y"]);
-
-			$this->config = new YamlConfigBuilder($this->fileSystem);
-			$this->assertEquals(["a" => "b", "c" => "d"], $this->config->build());
-		}
-
-		function test_LoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
-		{
-			$this->fileSystem = $this->getFileSystemMock();
-
-			$this->fileSystem->expects($this->any())
-			                 ->method("getFileContent")
-			                 ->withConsecutive(["x"], ["y"])
-			                 ->willReturnOnConsecutiveCalls(
-					                 'c: "d"',
-					                 'c: "b"'
-			                 );
-			$this->fileSystem->expects($this->any())
-			                 ->method("glob")
-			                 ->willReturn(["x", "y"]);
-
-			$this->config = new YamlConfigBuilder($this->fileSystem);
-			$this->assertEquals(["c" => "b"], $this->config->build());
-		}
-
-        /**
-         * @return \PHPUnit_Framework_MockObject_MockObject
-         */
-        public function getFileSystemMock()
-        {
-            return $this->createMock(IFileSystem::class);
-        }
+        $this->config = new YamlConfigBuilder($this->fileSystemMock);
+        $this->config->build();
     }
+
+    public function testConstructorWillSearchForFilesWithGivenMask()
+    {
+        $this->fileSystemMock = $this->getFileSystemMock();
+
+        $this->fileSystemMock
+            ->expects($this->once())
+            ->method("glob")
+            ->with("8")
+            ->willReturn([]);
+
+        $this->config = new YamlConfigBuilder($this->fileSystemMock, "8");
+        $this->config->build();
+    }
+
+    public function testLoadOneFileWillAddValuesToConfig()
+    {
+        $this->fileSystemMock = $this->getFileSystemMock();
+
+        $this->fileSystemMock
+            ->method("getFileContent")
+            ->willReturn('a: "b"');
+
+        $this->fileSystemMock
+            ->method("glob")
+            ->willReturn(["x"]);
+
+        $this->config = new YamlConfigBuilder($this->fileSystemMock);
+        $this->assertEquals(["a" => "b"], $this->config->build());
+    }
+
+    public function testLoadTwoFilesWillAppendValuesFromSecondFileToConfig()
+    {
+        $this->fileSystemMock = $this->getFileSystemMock();
+
+        $this->fileSystemMock
+            ->method("getFileContent")
+            ->withConsecutive(["x"], ["y"])
+            ->willReturnOnConsecutiveCalls(
+                'a: "b"',
+                'c: "d"'
+            );
+        $this->fileSystemMock
+            ->method("glob")
+            ->willReturn(["x", "y"]);
+
+        $this->config = new YamlConfigBuilder($this->fileSystemMock);
+        $this->assertEquals(["a" => "b", "c" => "d"], $this->config->build());
+    }
+
+    public function testLoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
+    {
+        $this->fileSystemMock = $this->getFileSystemMock();
+
+        $this->fileSystemMock
+            ->method("getFileContent")
+            ->withConsecutive(["x"], ["y"])
+            ->willReturnOnConsecutiveCalls(
+                'c: "d"',
+                'c: "b"'
+            );
+        $this->fileSystemMock
+            ->method("glob")
+            ->willReturn(["x", "y"]);
+
+        $this->config = new YamlConfigBuilder($this->fileSystemMock);
+        $this->assertEquals(["c" => "b"], $this->config->build());
+    }
+
+    /**
+     * @return IFileSystem | MockObject
+     */
+    private function getFileSystemMock()
+    {
+        return $this->createMock(IFileSystem::class);
+    }
+}

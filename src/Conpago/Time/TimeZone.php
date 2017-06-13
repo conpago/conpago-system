@@ -1,20 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bg
- * Date: 26.04.17
- * Time: 21:48
- */
-
 namespace Conpago\Time;
+
 use Conpago\Time\Contract\ITimeZone;
 
-
-/**
- *
- * @license MIT
- * @author Bartosz Gołek <bartosz.golek@gmail.com>
- **/
 class TimeZone implements ITimeZone
 {
 
@@ -29,8 +17,8 @@ class TimeZone implements ITimeZone
      * timezone_identifier isn't valid, or true
      * otherwise.
      */
-    public function setDefaultTimeZone($timezoneIdentifier)
+    public function setDefaultTimeZone(string $timezoneIdentifier): bool
     {
-        date_default_timezone_set($timezoneIdentifier);
+        return date_default_timezone_set($timezoneIdentifier);
     }
 }

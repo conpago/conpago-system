@@ -1,24 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bgolek
- * Date: 2015-12-02
- * Time: 10:34
- */
-
 namespace Conpago\File;
 
 use Conpago\File\Contract\IPath;
 
 class Path implements IPath
 {
-    /**
-     * @var
-     */
+    /** @var string */
     private $path;
-    /**
-     * @var
-     */
+
+    /** @var string */
     private $realPath;
 
     /**
@@ -27,18 +17,18 @@ class Path implements IPath
      * @param string $path
      * @param string $realPath
      */
-    function __construct($path, $realPath)
+    public function __construct(string $path, string $realPath)
     {
         $this->path = $path;
         $this->realPath = $realPath;
     }
 
-    public function get()
+    public function get(): string
     {
         return $this->path;
     }
 
-    public function getReal()
+    public function getReal(): string
     {
         return $this->realPath;
     }

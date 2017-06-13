@@ -1,59 +1,54 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: bg
-	 * Date: 27.10.15
-	 * Time: 21:03
-	 */
+namespace Conpago\Config;
 
-	namespace Conpago\Config;
+use Conpago\Config\Contract\IConfig;
+use Conpago\Conpago\Config\Contract\KeyNotFoundException;
 
+class ArrayConfig implements IConfig
+{
 
-	use Conpago\Config\Contract\IConfig;
+    /** @var array */
+    protected $config;
 
-	class ArrayConfig implements IConfig {
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
 
-		/**
-		 * @var array
-		 */
-		protected $config;
+    public function getValue(string $path)
+    {
+        $pathArray      = explode('.', $path);
+        $currentElement = $this->config;
 
-		function __construct(array $config) {
-			$this->config = $config;
-		}
+        foreach ($pathArray as $currentName) {
+            if (! array_key_exists($currentName, $currentElement)) {
+                throw new KeyNotFoundException();
+            }
 
-		function getValue($path) {
-			$pathArray      = explode('.', $path);
-			$currentElement = $this->config;
+            $currentElement = $currentElement[ $currentName ];
+        }
 
-			foreach ($pathArray as $currentName) {
-				if ( ! array_key_exists($currentName, $currentElement)) {
-					throw new MissingConfigurationException($path);
-				}
+        return $currentElement;
+    }
 
-				$currentElement = $currentElement[ $currentName ];
-			}
+    /**
+     * @param $path
+     *
+     * @return bool
+    */
+    public function hasValue(string $path): bool
+    {
+        $pathArray      = explode('.', $path);
+        $currentElement = $this->config;
 
-			return $currentElement;
-		}
+        foreach ($pathArray as $currentName) {
+            if (! array_key_exists($currentName, $currentElement)) {
+                return false;
+            }
 
-		/**
-		 * @param $path
-		 *
-		 * @return bool
-	    */
-		function hasValue($path) {
-			$pathArray      = explode('.', $path);
-			$currentElement = $this->config;
+            $currentElement = $currentElement[ $currentName ];
+        }
 
-			foreach ($pathArray as $currentName) {
-				if ( ! array_key_exists($currentName, $currentElement)) {
-					return false;
-				}
-
-				$currentElement = $currentElement[ $currentName ];
-			}
-
-			return true;
-		}
-	}
+        return true;
+    }
+}

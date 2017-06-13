@@ -1,111 +1,104 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: Bartosz Gołek
-	 * Date: 2014-06-09
-	 * Time: 00:00
-	 */
+namespace Conpago\Config;
 
-	namespace Conpago\Config;
+use Conpago\File\Contract\IFileSystem;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-	use Conpago\File\Contract\IFileSystem;
+class PhpConfigBuilderTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var IFileSystem | MockObject */
+    protected $fileSystem;
 
-    class PhpConfigBuilderTest extends \PHPUnit_Framework_TestCase
-	{
-		/**
-		 * @var \PHPUnit_Framework_MockObject_MockObject
-		 */
-		protected $fileSystem;
-		/**
-		 * @var PhpConfigBuilder
-		 */
-		protected $config;
+    /** @var PhpConfigBuilder */
+    protected $config;
 
-		function test_ConstructorWillSearchForFilesWithDefaultMask()
-		{
-			$this->fileSystem = $this->createFileSystemMock();
+    public function testConstructorWillSearchForFilesWithDefaultMask()
+    {
+        $this->fileSystem = $this->createFileSystemMock();
 
-			$this->fileSystem->expects($this->once())
-				->method("glob")
-				->with("*.config.php")
-				->willReturn([]);
+        $this->fileSystem
+            ->expects($this->once())
+            ->method("glob")
+            ->with("*.config.php")
+            ->willReturn([]);
 
-			$this->config = new PhpConfigBuilder($this->fileSystem);
-			$this->config->build();
-		}
+        $this->config = new PhpConfigBuilder($this->fileSystem);
+        $this->config->build();
+    }
 
-		function test_ConstructorWillSearchForFilesWithGivenMask()
-		{
-			$this->fileSystem = $this->createFileSystemMock();
+    public function testConstructorWillSearchForFilesWithGivenMask()
+    {
+        $this->fileSystem = $this->createFileSystemMock();
 
-			$this->fileSystem->expects($this->once())
-			                 ->method("glob")
-			                 ->with("8")
-			                 ->willReturn([]);
+        $this->fileSystem
+            ->expects($this->once())
+            ->method("glob")
+            ->with("8")
+            ->willReturn([]);
 
-			$this->config = new PhpConfigBuilder($this->fileSystem, "8");
-			$this->config->build();
-		}
+        $this->config = new PhpConfigBuilder($this->fileSystem, "8");
+        $this->config->build();
+    }
 
-		function test_LoadOneFileWillAddValuesToConfig()
-		{
-			$this->fileSystem = $this->createFileSystemMock();
+    public function testLoadOneFileWillAddValuesToConfig()
+    {
+        $this->fileSystem = $this->createFileSystemMock();
 
-			$this->fileSystem->expects($this->any())
-				->method("includeFile")
-				->willReturn(["a" => "b"]);
+        $this->fileSystem
+            ->method("includeFile")
+            ->willReturn(["a" => "b"]);
 
-			$this->fileSystem->expects($this->any())
-			                 ->method("glob")
-			                 ->willReturn(["x"]);
+        $this->fileSystem
+            ->method("glob")
+            ->willReturn(["x"]);
 
-			$this->config = new PhpConfigBuilder($this->fileSystem);
-			$this->assertEquals(["a" => "b"], $this->config->build());
-		}
+        $this->config = new PhpConfigBuilder($this->fileSystem);
+        $this->assertEquals(["a" => "b"], $this->config->build());
+    }
 
-		function test_LoadTwoFilesWillAppendValuesFromSecondFileToConfig()
-		{
-			$this->fileSystem = $this->createFileSystemMock();
+    public function testLoadTwoFilesWillAppendValuesFromSecondFileToConfig()
+    {
+        $this->fileSystem = $this->createFileSystemMock();
 
-			$this->fileSystem->expects($this->any())
-                 ->method("includeFile")
-				->withConsecutive(["x"], ["y"])
-				->willReturnOnConsecutiveCalls(
-					["a" => "b"],
-					["c" => "d"]
-				);
-			$this->fileSystem->expects($this->any())
-			                 ->method("glob")
-			                 ->willReturn(["x", "y"]);
+        $this->fileSystem
+             ->method("includeFile")
+            ->withConsecutive(["x"], ["y"])
+            ->willReturnOnConsecutiveCalls(
+                ["a" => "b"],
+                ["c" => "d"]
+            );
+        $this->fileSystem
+            ->method("glob")
+            ->willReturn(["x", "y"]);
 
-			$this->config = new PhpConfigBuilder($this->fileSystem);
-			$this->assertEquals(["a" => "b", "c" => "d"], $this->config->build());
-		}
+        $this->config = new PhpConfigBuilder($this->fileSystem);
+        $this->assertEquals(["a" => "b", "c" => "d"], $this->config->build());
+    }
 
-		function test_LoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
-		{
-			$this->fileSystem = $this->createFileSystemMock();
+    public function testLoadTwoFilesWillOverrideValuesFromSecondFileToConfig()
+    {
+        $this->fileSystem = $this->createFileSystemMock();
 
-			$this->fileSystem->expects($this->any())
-			                 ->method("includeFile")
-			                 ->withConsecutive(["x"], ["y"])
-			                 ->willReturnOnConsecutiveCalls(
-					                 ["c" => "d"],
-					                 ["c" => "b"]
-			                 );
-			$this->fileSystem->expects($this->any())
-			                 ->method("glob")
-			                 ->willReturn(["x", "y"]);
+        $this->fileSystem
+            ->method("includeFile")
+            ->withConsecutive(["x"], ["y"])
+            ->willReturnOnConsecutiveCalls(
+                ["c" => "d"],
+                ["c" => "b"]
+            );
+        $this->fileSystem
+            ->method("glob")
+            ->willReturn(["x", "y"]);
 
-			$this->config = new PhpConfigBuilder($this->fileSystem);
-			$this->assertEquals(["c" => "b"], $this->config->build());
-		}
+        $this->config = new PhpConfigBuilder($this->fileSystem);
+        $this->assertEquals(["c" => "b"], $this->config->build());
+    }
 
-		/**
-		 * @return \PHPUnit_Framework_MockObject_MockObject
-		 */
-		public function createFileSystemMock()
-		{
-			return $this->createMock(IFileSystem::class);
-		}
-	}
+    /**
+     * @return IFileSystem | MockObject
+     */
+    public function createFileSystemMock()
+    {
+        return $this->createMock(IFileSystem::class);
+    }
+}

@@ -8,43 +8,47 @@
 
 namespace Conpago\File;
 
-
 use Conpago\File\Contract\IFileSystem;
 
 class FileSystem implements IFileSystem
 {
 
-    function includeFile($filePath)
+    public function includeFile(string $filePath)
     {
         return include $filePath;
     }
 
-    function glob($pattern, $flags = null)
+    public function glob(string $pattern)
     {
-        return glob($pattern, $flags);
+        return glob($pattern, null);
     }
 
-    function realPath($path)
+    public function realPath(string $path): string
     {
         return realpath($path);
     }
 
-    function getFileContent($filename)
+    public function getFileContent(string $filename): string
     {
         return file_get_contents($filename);
     }
 
-    function setFileContent($filename, $data)
+    public function setFileContent(string $filename, string $content): int
     {
-        file_put_contents($filename, $data);
+        $result = file_put_contents($filename, $content);
+        if ($result === false) {
+            throw new \Exception("Content was not written");
+        }
+
+        return $result;
     }
 
-    function requireOnce($filePath)
+    public function requireOnce(string $filePath)
     {
         require_once $filePath;
     }
 
-    function requireFile($filePath)
+    public function requireFile(string $filePath)
     {
         require $filePath;
     }
@@ -63,14 +67,15 @@ class FileSystem implements IFileSystem
 
     private function getNameSpace($filePath)
     {
-        $matches = array();
-        if (preg_match('/namespace (.+) *[\{;]{1}/', file_get_contents($filePath), $matches))
+        $matches = [];
+        if (preg_match('/namespace (.+) *[\{;]{1}/', file_get_contents($filePath), $matches)) {
             return $matches[1];
+        }
 
         return '';
     }
 
-    function loadClass($filePath)
+    public function loadClass(string $filePath)
     {
         $className = $this->getClassName($filePath);
         $this->requireOnce($filePath);
@@ -78,14 +83,13 @@ class FileSystem implements IFileSystem
         return new $className();
     }
 
-    public function createDirectory($pathname, $recursive)
+    public function createDirectory(string $pathname, bool $recursive)
     {
         return mkdir($pathname, 0777, $recursive);
     }
 
-    public function fileExists($filename)
+    public function fileExists(string $filename): bool
     {
         return file_exists($filename);
     }
 }
-

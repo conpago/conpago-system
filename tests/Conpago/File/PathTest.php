@@ -1,27 +1,19 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: bgolek
-	 * Date: 2014-10-10
-	 * Time: 07:57
-	 */
+namespace Conpago\File;
 
-	namespace Conpago\File;
+use PHPUnit\Framework\TestCase;
 
+class PathTest extends TestCase
+{
+    public function testGetRealPath()
+    {
+        $path = new Path("a", "");
+        $this->assertEquals('a', $path->get());
+    }
 
-	use Conpago\File\Path;
-
-	class PathTest extends \PHPUnit_Framework_TestCase
-	{
-		function testGetRealPath()
-		{
-			$path = new Path("a", "");
-			$this->assertEquals('a', $path->get());
-		}
-
-		function testGetPath()
-		{
-			$path = new Path("", "a/b/c");
-			$this->assertEquals('a/b/c', $path->getReal());
-		}
-	}
+    public function testGetPath()
+    {
+        $path = new Path("", "a/b/c");
+        $this->assertEquals('a/b/c', $path->getReal());
+    }
+}
