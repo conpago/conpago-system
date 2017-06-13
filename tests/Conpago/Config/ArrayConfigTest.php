@@ -31,7 +31,7 @@ class ArrayConfigTest extends TestCase
 
     public function testGetNotExistingSimpleValue()
     {
-        $this->expectedException(KeyNotFoundException::class);
+        $this->expectException(KeyNotFoundException::class);
 
         $config = new ArrayConfig([]);
         $config->getValue('dummy');
@@ -39,7 +39,7 @@ class ArrayConfigTest extends TestCase
 
     public function testGetNotExistingNestedValue()
     {
-        $this->expectedException(KeyNotFoundException::class);
+        $this->expectException(KeyNotFoundException::class);
 
         $config = new ArrayConfig([]);
         $config->getValue($this->buildNestedPath([self::NESTING_KEY, 'dummy']));
