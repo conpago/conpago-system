@@ -2,9 +2,10 @@
 namespace Conpago\Config;
 
 use Conpago\File\Contract\IFileSystem;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class PhpConfigBuilderTest extends \PHPUnit_Framework_TestCase
+class PhpConfigBuilderTest extends TestCase
 {
     /** @var IFileSystem | MockObject */
     protected $fileSystem;

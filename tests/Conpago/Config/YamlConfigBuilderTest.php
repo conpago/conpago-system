@@ -2,9 +2,10 @@
 namespace Conpago\Config;
 
 use Conpago\File\Contract\IFileSystem;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class YamlConfigBuilderTest extends \PHPUnit_Framework_TestCase
+class YamlConfigBuilderTest extends TestCase
 {
     /** @var  MockObject | IFileSystem*/
     protected $fileSystemMock;
