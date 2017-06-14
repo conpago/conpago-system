@@ -1,7 +1,7 @@
 <?php
 namespace Conpago\Config;
 
-use Conpago\Conpago\Config\Contract\KeyNotFoundException;
+use Conpago\Config\Contract\KeyNotFoundException;
 use PHPUnit\Framework\TestCase;
 
 class ArrayConfigTest extends TestCase

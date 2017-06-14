@@ -2,8 +2,9 @@
 namespace Conpago\Config;
 
 use Conpago\Config\Contract\IConfig;
+use Conpago\Config\Contract\KeyNotFoundException;
 
-class BaseConfig implements IConfig
+abstract class BaseConfig implements IConfig
 {
 
     /** @var array */
@@ -11,12 +12,12 @@ class BaseConfig implements IConfig
 
     public function getValue(string $path)
     {
-        $pathArray      = explode( '.', $path );
+        $pathArray      = explode('.', $path);
         $currentElement = $this->config;
 
         foreach ($pathArray as $currentName) {
-            if (! array_key_exists( $currentName, $currentElement )) {
-                throw new MissingConfigurationException( $path );
+            if (! array_key_exists($currentName, $currentElement)) {
+                throw new KeyNotFoundException();
             }
 
             $currentElement = $currentElement[ $currentName ];
@@ -26,17 +27,17 @@ class BaseConfig implements IConfig
     }
 
     /**
-         * @param $path
-         *
-         * @return bool
-         */
+     * @param $path
+     *
+     * @return bool
+     */
     public function hasValue(string $path): bool
     {
-        $pathArray      = explode( '.', $path );
+        $pathArray      = explode('.', $path);
         $currentElement = $this->config;
 
         foreach ($pathArray as $currentName) {
-            if (! array_key_exists( $currentName, $currentElement )) {
+            if (! array_key_exists($currentName, $currentElement)) {
                 return false;
             }
 
